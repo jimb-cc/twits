@@ -24,7 +24,7 @@ TWDB = Mongo::Client.new(opts[:uri])
 Mongo::Logger.logger.level = ::Logger::WARN
 
 # Pull the connections in from the MetaColl
-connections = TWDB[:meta].find(type: 'connection').first
+connections = TWDB[opts[:metacoll]].find(type: 'connection').first
 ap connections
 
 @bearer_token = connections['bearer_token']
@@ -32,13 +32,13 @@ ap connections
 @rules_url = connections['rules_url']
 
 # Pull the rules from the MetaColl
-ruledoc = TWDB[:meta].find(type: 'rules').first
+ruledoc = TWDB[opts[:metacoll]].find(type: 'rules').first
 @sample_rules = ruledoc['rules']
 
 # Add or remove values from the optional parameters below. Full list of parameters can be found in the docs:
 # https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/get-tweets-search-stream
 
-paramsdoc = TWDB[:meta].find(type: 'params').first
+paramsdoc = TWDB[opts[:metacoll]].find(type: 'params').first
 params = { "expansions": paramsdoc['expansions'], "tweet.fields": paramsdoc['tweet'], "user.fields": paramsdoc['user'] }
 ap params
 
@@ -112,7 +112,7 @@ def stream_connect(params)
       doc = response['data']
       doc['users'] = response ['includes']['users']
       # insert the tweet object into the DB
-      id = TWDB[:tweets].insert_one(doc)
+      id = TWDB[opts[:tweetcoll]].insert_one(doc)
       puts "\n----------------------------\n"
       puts "#{Time.now - @t} secs since last event"
       @t = Time.now
