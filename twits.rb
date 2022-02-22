@@ -37,8 +37,10 @@ ruledoc = TWDB[:meta].find(type: 'rules').first
 
 # Add or remove values from the optional parameters below. Full list of parameters can be found in the docs:
 # https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/get-tweets-search-stream
-params = { "expansions": 'author_id,geo.place_id', "tweet.fields": 'created_at,geo,id,public_metrics',
-           "user.fields": 'id,name,username,public_metrics,description' }
+
+paramsdoc = TWDB[:meta].find(type: 'params').first
+params = { "expansions": paramsdoc['expansions'], "tweet.fields": paramsdoc['tweet'], "user.fields": paramsdoc['user'] }
+ap params
 
 # Get request to rules endpoint. Returns list of of active rules from your stream
 def get_all_rules
@@ -121,7 +123,7 @@ end
 
 @t = Time.now
 @rules = get_all_rules
-@rules.nil? puts('-- No Rules')
+# @rules.nil? puts('-- No Rules')
 puts("-- Deleting all rules\n")
 delete_all_rules(@rules)
 puts "-- setting new rules\n"
