@@ -65,7 +65,7 @@ loop do
     # puts response.code, JSON.pretty_generate(JSON.parse(response.body))
     # ap response
     resetTime = Time.at(response.headers['x-rate-limit-reset'].to_i) - Time.now
-    puts("#{response.headers['x-rate-limit-remaining']} | #{resetTime.to_i} | ")
+    puts("#{response.headers['x-rate-limit-remaining']} | #{resetTime.to_i} |    ")
 
     update = JSON.parse(response.body).to_h
 
