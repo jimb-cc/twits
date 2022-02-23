@@ -35,8 +35,7 @@ params = { "ids": paramsdoc['ids'], "expansions": paramsdoc['expansions'], "twee
 tweets = TWDB[opts[:tweetcoll]].aggregate([
     {'$match'=> {'meta'=> {'$exists'=> false}}}, 
     {'$addFields'=> {'fixedDate'=> {'$dateFromString'=> {'dateString'=> '$created_at'}}}}, 
-    {'$match'=> {'fixedDate'=> {'$lt'=> DateTime.now - (1.0)}}},
-    {'$limit'=>1500}
+    {'$match'=> {'fixedDate'=> {'$lt'=> DateTime.now - (1.0)}}}
   ])
 
 
@@ -78,6 +77,6 @@ tweets.each do |tweet|
         
       # puts("--- #{tweet['text']}")
       # write to the mongo document with the new update
-      TWDB[coll].update_one({ id: tweet['id'] }, tweet)
+      TWDB[opts[:tweetcoll]].update_one({ id: tweet['id'] }, tweet)
       pb.increment
 end
