@@ -98,4 +98,6 @@ loop do
     pb.increment
     sleep(paramsdoc['sleep'])
   end
+  puts ("Sleeping for #{paramsdoc['loopPause']} seconds")
+  sleep(paramsdoc['loopPause'])
 end
